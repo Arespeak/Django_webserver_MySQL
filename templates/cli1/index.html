@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cli1列表</title>
+</head>
+<body>
+<h1 align="center">users信息表</h1>
+<table border="1px" width="100%" style="border-collapse: collapse;">
+    <a href="../sim/add">添加用户</a>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>SEX</th>
+        <th>AGE</th>
+        <th>FANS</th>
+        <th>FOLLOWS</th>
+        <th>PUBLISHED</th>
+        <th>FAVORITES</th>
+        <th>操作</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+{#            <td align="center">{{ forloop.counter }} </td>#}
+            <td align="center">{{ user.ID }} </td>
+            <td align="center">{{ user.NAME }} </td>
+            <td align="center">{{ user.SEX }} </td>
+            <td align="center">{{ user.AGE }} </td>
+            <td align="center">{{ user.FANS }} </td>
+            <td align="center">{{ user.FOLLOWS }} </td>
+            <td align="center">{{ user.PUBLISHED }} </td>
+            <td align="center">{{ user.FAVORITES }} </td>
+            <td align="center">
+                <a href="../sim/edit/?ID={{ user.ID }}">
+                    编辑
+                </a>
+                <a href="../sim/delete/?ID={{ user.ID }}">
+                    删除
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

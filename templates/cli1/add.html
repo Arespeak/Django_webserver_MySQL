@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加用户</title>
+    <style>
+        form {
+            margin: 20px auto;
+            width: 500px;
+            border: 1px solid #ccc;
+            padding: 20px
+        }
+    </style>
+</head>
+<body>
+<form method="post" action="../add/">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <th>昵称</th>
+            <td><input name="user_name"></td>
+        </tr>
+        <tr>
+            <th>性别</th>
+            <td><input name="user_sex"/></td>
+        </tr>
+        <tr>
+            <th>年龄</th>
+            <td><input name="user_age"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit"/>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

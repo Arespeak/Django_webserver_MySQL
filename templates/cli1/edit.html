@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改信息</title>
+    <style>
+        form {
+            margin: 20px auto;
+            width: 500px;
+            border: 1px solid #ccc;
+            padding: 20px
+        }
+    </style>
+</head>
+<body>
+<form method="post" action="../edit/">
+    {% csrf_token %}
+{#    <input type="hidden" name="ID" value="{{ users.ID }}"/>#}
+    <input name="ID" value="{{ users.ID }}"/>
+
+    <table>
+        <tr>
+            <th>姓名</th>
+            <td><input name="user_name" value="{{ users.NAME }}"></td>
+        </tr>
+        <tr>
+            <th>年龄</th>
+            <td><input name="user_age" value="{{ users.AGE }}"/></td>
+        </tr>
+        <tr>
+            <th>粉丝数</th>
+            <td><input name="user_fans" value="{{ users.FANS }}"/></td>
+        </tr>
+        <tr>
+            <th>关注</th>
+            <td><input name="user_follows" value="{{ users.FOLLOWS }}"/></td>
+        </tr>
+        <tr>
+            <th>发布作品数</th>
+            <td><input name="user_pub" value="{{ users.PUBLISHED }}"/></td>
+        </tr>
+        <tr>
+            <th>喜欢</th>
+            <td><input name="user_favorites" value="{{ users.FAVORITES }}"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit"/>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
