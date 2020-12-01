@@ -13,10 +13,11 @@
     </style>
 </head>
 <body>
-<form method="post" action="../edit/">
+<form method="post">
+{#    action="sim/edit/">#}
     {% csrf_token %}
 {#    <input type="hidden" name="ID" value="{{ users.ID }}"/>#}
-{#    <input name="ID" value="修改账号{{ users.ID }}用户的信息：">#}
+    <input type="hidden" name="ID" value="{{ users.ID }}">
     <h2 align="left">修改账号{{ users.ID }}用户的信息：</h2>
 
     <table>

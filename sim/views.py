@@ -9,13 +9,22 @@ from django.shortcuts import render, redirect
 import MySQLdb
 
 # Create your views here.
+#目录网页
+def content(request):
+    if request.method == 'GET':
+        return render(request, 'cli1/content.html')
+
+
 #建立查询的操作函数
 def index(request):
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform", charset='utf8')
-    with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
-        cursor.execute("SELECT * FROM users")
-        users = cursor.fetchall()
-    return render(request, 'cli1/index.html', {'users': users})
+    if request.method == 'GET':
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM users")
+            users = cursor.fetchall()
+        return render(request, 'cli1/index.html', {'users': users})
+
 
 #添加用户信息
 def add(request):
@@ -31,7 +40,9 @@ def add(request):
             cursor.execute("INSERT INTO users (NAME,SEX,AGE)"
                            "VALUES (%s, %s, %s)", [user_name,user_sex,user_age])
             conn.commit()
-        return redirect('../')
+            cursor.execute("SELECT * FROM users")
+            users = cursor.fetchall()
+        return render(request, 'cli1/index.html', {'users': users})
 
 #删除用户信息
 def delete(request):
@@ -41,7 +52,7 @@ def delete(request):
         cursor.execute("DELETE FROM users WHERE ID = %s", [id])
         # cursor.execute("CALL USERDELECT(%s)", [id])
         conn.commit()
-    return redirect('../')
+    return redirect('cli1/index.html')
 
 
 #更改用户信息
@@ -53,6 +64,7 @@ def edit(request):
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
             cursor.execute("SELECT * FROM users WHERE ID = %s", [id])
             users = cursor.fetchone()
+        print(users)
         return render(request, 'cli1/edit.html', {'users':users})
     else:
         id = request.POST.get("ID")
@@ -69,4 +81,7 @@ def edit(request):
             cursor.execute("UPDATE users SET NAME=%s,AGE=%s,FANS=%s,FOLLOWS=%s,PUBLISHED=%s,FAVORITES=%s WHERE ID=%s",
                            [user_name, user_age, user_fans, user_follows, user_pub, user_favorites, id])
             conn.commit()
-        return redirect('../')
+            cursor.execute("SELECT * FROM users")
+            users = cursor.fetchall()
+        return render(request, 'cli1/index.html', {'users': users})
+        # return redirect('cl1/index.html')
