@@ -38,8 +38,8 @@ def delete(request):
     id = request.GET.get("ID")
     conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform", charset='utf8')
     with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
-        #cursor.execute("DELETE FROM users WHERE ID = %s", [id])
-        cursor.execute("CALL USERDELECT(%s)", [id])
+        cursor.execute("DELETE FROM users WHERE ID = %s", [id])
+        # cursor.execute("CALL USERDELECT(%s)", [id])
         conn.commit()
     return redirect('../')
 

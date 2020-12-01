@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>cli1列表</title>
     <style>
         .button {
             background-color: #4CAF50;
-            border: none;
+            border: 1px;
             color: white;
             padding: 15px 25px;
             text-align: center;
@@ -16,10 +18,23 @@
     </style>
 </head>
 <body>
+<div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <ul class="nav nav-tabs">
+                <li style="margin: 15px 120px"><a></a></li>
+                <li style="margin: 15px 10px"><a></a></li>
+                <li style="margin: 20px 60px"><a href="http://127.0.0.1:5000/">目录</a></li>
+                <li style="margin: 20px 60px"><a href="http://127.0.0.1:5000/table_customers">用户表</a></li>
+                <li style="margin: 20px 60px"><a href="http://127.0.0.1:5000/table_menu">短视频表</a></li>
+            </ul>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
 <h1 align="center">users信息表</h1>
 <table border="1px" width="100%" style="border-collapse: collapse;">
     <button onclick="window.location.href='../sim/add'">添加用户</button>
-    <tr>
+    <tr align="center" bgcolor="#f5f5dc">
         <th>ID</th>
         <th>NAME</th>
         <th>SEX</th>
@@ -31,7 +46,7 @@
         <th>操作</th>
     </tr>
     {% for user in users %}
-        <tr>
+        <tr bgcolor="#dcdcdc">
 {#            <td align="center">{{ forloop.counter }} </td>#}
             <td align="center">{{ user.ID }} </td>
             <td align="center">{{ user.NAME }} </td>
