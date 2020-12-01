@@ -1,3 +1,10 @@
+'''
+作者：桑忠人 18281160
+时间：2020.11
+描述：本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有！
+'''
+
+
 from django.shortcuts import render, redirect
 import MySQLdb
 
