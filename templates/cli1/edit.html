@@ -16,31 +16,32 @@
 <form method="post" action="../edit/">
     {% csrf_token %}
 {#    <input type="hidden" name="ID" value="{{ users.ID }}"/>#}
-    <input name="ID" value="{{ users.ID }}"/>
+{#    <input name="ID" value="修改账号{{ users.ID }}用户的信息：">#}
+    <h2 align="center">修改账号{{ users.ID }}用户的信息：</h2>
 
     <table>
         <tr>
-            <th>姓名</th>
+            <th align="center">姓名:</th>
             <td><input name="user_name" value="{{ users.NAME }}"></td>
         </tr>
         <tr>
-            <th>年龄</th>
+            <th>年龄:</th>
             <td><input name="user_age" value="{{ users.AGE }}"/></td>
         </tr>
         <tr>
-            <th>粉丝数</th>
+            <th>粉丝数:</th>
             <td><input name="user_fans" value="{{ users.FANS }}"/></td>
         </tr>
         <tr>
-            <th>关注</th>
+            <th>关注:</th>
             <td><input name="user_follows" value="{{ users.FOLLOWS }}"/></td>
         </tr>
         <tr>
-            <th>发布作品数</th>
+            <th>发布作品数:</th>
             <td><input name="user_pub" value="{{ users.PUBLISHED }}"/></td>
         </tr>
         <tr>
-            <th>喜欢</th>
+            <th>喜欢:</th>
             <td><input name="user_favorites" value="{{ users.FAVORITES }}"/></td>
         </tr>
         <tr>

@@ -3,11 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>cli1列表</title>
+    <style>
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <h1 align="center">users信息表</h1>
 <table border="1px" width="100%" style="border-collapse: collapse;">
-    <a href="../sim/add">添加用户</a>
+    <button onclick="window.location.href='../sim/add'">添加用户</button>
     <tr>
         <th>ID</th>
         <th>NAME</th>
@@ -31,12 +42,12 @@
             <td align="center">{{ user.PUBLISHED }} </td>
             <td align="center">{{ user.FAVORITES }} </td>
             <td align="center">
-                <a href="../sim/edit/?ID={{ user.ID }}">
+                <button onclick="window.location.href='../sim/edit/?ID={{ user.ID }}'">
                     编辑
-                </a>
-                <a href="../sim/delete/?ID={{ user.ID }}">
+                </button>
+                <button onclick="window.location.href='../sim/delete/?ID={{ user.ID }}'">
                     删除
-                </a>
+                </button>
             </td>
         </tr>
     {% endfor %}
@@ -46,6 +57,6 @@
     时间：2020.11
     描述：本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有！
 -->
-<div id="footer" align="center">本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有！</div>
+<div id="footer" align="center">本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有</div>
 </body>
 </html>
