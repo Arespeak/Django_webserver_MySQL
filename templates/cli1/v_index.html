@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>cli1列表</title>
+    <style>
+        .button {
+            background-color: #4CAF50;
+            border: 1px;
+            color: white;
+            padding: 15px 25px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <ul class="nav nav-tabs">
+                <li style="margin: 15px 120px"><a></a></li>
+                <li style="margin: 15px 10px"><a></a></li>
+                <li style="margin: 20px 60px"><a href="../" name="cont">目录</a></li>
+                <li style="margin: 20px 60px"><a href="/sim/index" name="user">用户表</a></li>
+                <li style="margin: 20px 60px"><a href="/sim/v_index" name="video">短视频表</a></li>
+            </ul>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+<h1 align="center">videos信息表</h1>
+<table border="1px" width="100%" style="border-collapse: collapse;">
+    <button onclick="window.location.href='../v_add'">添加视频信息</button>
+    <tr align="center" bgcolor="#f5f5dc">
+        <th>NO</th>
+        <th>AUTHOR</th>
+        <th>LIKES</th>
+        <th>PERFORMED</th>
+        <th>COMMENT</th>
+        <th>INTRO</th>
+        <th>UPDATE_TIME</th>
+{#        <th>FAVORITES</th>#}
+        <th>操作</th>
+    </tr>
+    {% for user in users %}
+        <tr bgcolor="#dcdcdc">
+{#            <td align="center">{{ forloop.counter }} </td>#}
+            <td align="center">{{ user.NO }} </td>
+            <td align="center">{{ user.AUTHOR }} </td>
+            <td align="center">{{ user.LIKES }} </td>
+            <td align="center">{{ user.PERFORMED }} </td>
+            <td align="center">{{ user.COMMENT }} </td>
+            <td align="center">{{ user.INTRO }} </td>
+            <td align="center">{{ user.UPDATE_TIME }} </td>
+{#            <td align="center">{{ user.FAVORITES }} </td>#}
+            <td align="center">
+                <button onclick="window.location.href='../v_edit/?NO={{ user.NO }}'">
+                    编辑
+                </button>
+                <button onclick="window.location.href='../v_delete/?NO={{ user.NO }}'">
+                    删除
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<!--
+    作者：桑忠人 18281160
+    时间：2020.11
+    描述：本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有！
+-->
+<div id="footer" align="center">本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有</div>
+</body>
+</html>

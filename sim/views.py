@@ -52,7 +52,11 @@ def delete(request):
         cursor.execute("DELETE FROM users WHERE ID = %s", [id])
         # cursor.execute("CALL USERDELECT(%s)", [id])
         conn.commit()
-    return redirect('cli1/index.html')
+        cursor.execute("SELECT * FROM users")
+        users = cursor.fetchall()
+    return render(request, 'cli1/index.html', {'users': users})
+
+    # return redirect('cli1/index.html')
 
 
 #更改用户信息
@@ -85,3 +89,76 @@ def edit(request):
             users = cursor.fetchall()
         return render(request, 'cli1/index.html', {'users': users})
         # return redirect('cl1/index.html')
+
+#建立视频表查询的操作函数
+def v_index(request):
+    if request.method == 'GET':
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM videos")
+            users = cursor.fetchall()
+        return render(request, 'cli1/v_index.html', {'users': users})
+
+
+#添加用户信息
+def v_add(request):
+    if request.method == 'GET':
+        return render(request, 'cli1/v_add.html')
+    else:
+        video_author = request.POST.get('video_author', '')
+        video_intro = request.POST.get('video_intro', '')
+        # user_age = request.POST.get('user_age', '')
+        # user_age = int(user_age)
+        conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform", charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("INSERT INTO videos (AUTHOR,INTRO)"
+                           "VALUES (%s, %s)", [video_author, video_intro])
+            conn.commit()
+            cursor.execute("SELECT * FROM videos")
+            users = cursor.fetchall()
+        return render(request, 'cli1/v_index.html', {'users': users})
+
+#删除用户信息
+def v_delete(request):
+    id = request.GET.get("ID")
+    conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform", charset='utf8')
+    with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+        cursor.execute("DELETE FROM videos WHERE ID = %s", [id])
+        # cursor.execute("CALL USERDELECT(%s)", [id])
+        conn.commit()
+        cursor.execute("SELECT * FROM videos")
+        users = cursor.fetchall()
+    return render(request, 'cli1/v_index.html', {'users': users})
+
+    # return redirect('cli1/index.html')
+
+
+#更改用户信息
+def v_edit(request):
+    if request.method == 'GET':
+        no = request.GET.get("NO")
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM videos WHERE NO = %s", [no])
+            users = cursor.fetchone()
+        print(users)
+        return render(request, 'cli1/v_edit.html', {'users':users})
+    else:
+        no = request.POST.get("NO")
+        video_author = request.POST.get('video_author', '')
+        # user_sex = request.POST.get('user_sex', '')
+        video_likes = request.POST.get('video_likes', '')
+        video_performed = request.POST.get('video_performed', '')
+        video_comment = request.POST.get('video_comment', '')
+        video_intro = request.POST.get('video_intro', '')
+        # print(user_name, user_age, user_fans, user_follows, user_pub, user_favorites, id)
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("UPDATE videos SET AUTHOR=%s,LIKES=%s,PERFORMED=%s,COMMENT=%s,INTRO=%s WHERE NO=%s",
+                           [video_author, video_likes, video_performed, video_comment, video_intro, no])
+            conn.commit()
+            cursor.execute("SELECT * FROM videos")
+            users = cursor.fetchall()
+        return render(request, 'cli1/v_index.html', {'users': users})
