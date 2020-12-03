@@ -4,7 +4,6 @@
 描述：本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有！
 '''
 
-
 from django.shortcuts import render, redirect
 import MySQLdb
 
@@ -119,7 +118,7 @@ def v_add(request):
             users = cursor.fetchall()
         return render(request, 'cli1/v_index.html', {'users': users})
 
-#删除用户信息
+#删除视频信息
 def v_delete(request):
     id = request.GET.get("ID")
     conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform", charset='utf8')
@@ -134,7 +133,7 @@ def v_delete(request):
     # return redirect('cli1/index.html')
 
 
-#更改用户信息
+#更改视频信息
 def v_edit(request):
     if request.method == 'GET':
         no = request.GET.get("NO")
