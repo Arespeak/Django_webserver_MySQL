@@ -6,9 +6,27 @@
 
 from django.shortcuts import render, redirect
 import MySQLdb
-from django.http import HttpResponse
 
 # Create your views here.
+#登录界面
+def login(request):
+    if request.method == 'GET':
+        return render(request, 'cli1/login.html')
+    else:
+        admin_name = request.POST.get('admin_name')
+        admin_id = request.POST.get('admin_id')
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT WORK_ID FROM adminors WHERE NAME=%s", [admin_name])
+            result = cursor.fetchall()
+        if admin_id != result[0]["WORK_ID"] or result[0]["WORK_ID"] == None:
+            mesg = '用户名或工号输入错误！请重新输入！'
+            return render(request, 'cli1/login.html', {'message': mesg})
+        else:
+            return render(request, 'cli1/content.html')
+
+
 #目录网页
 def content(request):
     if request.method == 'GET':
@@ -180,3 +198,20 @@ def v_edit(request):
             cursor.execute("SELECT * FROM videos")
             users = cursor.fetchall()
         return render(request, 'cli1/v_index.html', {'users': users})
+
+def v_find(request):
+    if request.method == 'GET':
+        return render(request, 'cli1/v_find.html')
+    else:
+        video_no = request.POST.get('video_no', '')
+        conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM videos WHERE NO=%s", [video_no])
+            result = cursor.fetchall()
+        if len(result) == 0:
+            # return HttpResponse("查无此人！请输入正确的用户ID！")
+            message = '没有此视频信息！请输入正确的视频序号！'
+            return render(request, 'cli1/v_find.html', {'message':message})
+        else:
+            return render(request, 'cli1/v_index.html', {'users':result})

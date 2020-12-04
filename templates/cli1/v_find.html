@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查找视频</title>
+    <style>
+        form {
+            margin: 20px auto;
+            width: 500px;
+            border: 1px solid #ccc;
+            padding: 20px
+        }
+    </style>
+</head>
+<body>
+<form method="post">
+{#     action="sim/add/"#}
+    {% csrf_token %}
+    <h2 align="left">查找视频</h2>
+    <table>
+        <tr>
+            <th>视频NO</th>
+            <td><input name="video_no"></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" value="查找"/>
+            </td>
+        </tr>
+    </table>
+</form>
+{% if message %}
+    <script>
+        alert('{{ message }}')
+    </script>
+
+{% endif %}
+<!--
+    作者：桑忠人 18281160
+    时间：2020.11
+    描述：本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有！
+-->
+<div id="footer" align="center">本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有</div>
+</body>
+</html>

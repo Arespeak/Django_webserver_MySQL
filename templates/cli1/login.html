@@ -1,10 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1,maximum-scale=1">
+	<title>vue前后端分离</title>
+
+	<style>
+        .button {
+            display: block;
+            margin: 0 auto;
+            line-height: 30px;
+            font-size: 20px;
+            color: #fff;
+            background: #0f88eb;
+            border: 0;
+            border-radius: 10px;
+        }
+        input, textarea {
+            border: 1px solid #ddeafb; }
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            outline: none;
+            margin-bottom: 5px;
+            border-radius: 5px; }
+        .hint {
+            font-size: 20px;
+            font-family: 楷体;
+            color: #cccccc;
+            text-align: left;
+            padding-right: 10px;
+            margin-bottom: 15px;
+            visibility: visible; }
+        form {
+            margin: 20px auto;
+            width: 500px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            top: 200px;
+        }
+
+    </style>
 </head>
 <body>
+		<form method="post">
+            {% csrf_token %}
+            <h2 align="center" style="font-family: 楷体; font-size: 45px; color: gray">管理员登录</h2>
+                <div class="hint">请输入用户名</div>
+				<input class="input" name="admin_name" type="text" aria-label="用户名" placeholder="用户名">
+				<div class="hint">请输入工号</div>
+				<input class="input" name="admin_id" type="password" aria-label="工号" placeholder="工号">
+				<input type="submit" id="button" class="button" name="button" value="登录">
+		</form>
+{% if message %}
+    <script>
+        alert('{{ message }}')
+    </script>
 
+{% endif %}
 </body>
 </html>
