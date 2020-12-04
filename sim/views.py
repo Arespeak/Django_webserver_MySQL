@@ -6,6 +6,7 @@
 
 from django.shortcuts import render, redirect
 import MySQLdb
+from django.http import HttpResponse
 
 # Create your views here.
 #目录网页
@@ -87,7 +88,25 @@ def edit(request):
             cursor.execute("SELECT * FROM users")
             users = cursor.fetchall()
         return render(request, 'cli1/index.html', {'users': users})
+
         # return redirect('cl1/index.html')
+
+def find(request):
+    if request.method == 'GET':
+        return render(request, 'cli1/find.html')
+    else:
+        user_id = request.POST.get('user_id', '')
+        conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM users WHERE ID=%s", [user_id])
+            result = cursor.fetchall()
+        if len(result) == 0:
+            # return HttpResponse("查无此人！请输入正确的用户ID！")
+            message = '查无此人！请输入正确的用户ID！'
+            return render(request, 'cli1/find.html', {'message':message})
+        else:
+            return render(request, 'cli1/index.html', {'users':result})
 
 #建立视频表查询的操作函数
 def v_index(request):
