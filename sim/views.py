@@ -21,7 +21,7 @@ def login(request):
             cursor.execute("SELECT WORK_ID FROM adminors WHERE NAME=%s", [admin_name])
             result = cursor.fetchall()
         if not result or admin_id != result[0]["WORK_ID"]:
-            mesg = '用户名或工号输入错误！请重新输入！'
+            mesg = '用户名或工号输入错误！请重新输入!'
             return render(request, 'cli1/login.html', {'message': mesg})
         else:
             return render(request, 'cli1/content.html')
