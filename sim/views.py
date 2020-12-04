@@ -210,7 +210,6 @@ def v_find(request):
             cursor.execute("SELECT * FROM videos WHERE NO=%s", [video_no])
             result = cursor.fetchall()
         if len(result) == 0:
-            # return HttpResponse("查无此人！请输入正确的用户ID！")
             message = '没有此视频信息！请输入正确的视频序号！'
             return render(request, 'cli1/v_find.html', {'message':message})
         else:
