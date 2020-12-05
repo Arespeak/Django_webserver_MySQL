@@ -39,7 +39,7 @@ def index(request):
         conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
                                charset='utf8')
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
-            cursor.execute("SELECT * FROM users")
+            cursor.execute("SELECT * FROM users WHERE ID<1001")
             users = cursor.fetchall()
         return render(request, 'cli1/index.html', {'users': users})
 
@@ -60,7 +60,8 @@ def add(request):
             conn.commit()
             cursor.execute("SELECT * FROM users")
             users = cursor.fetchall()
-        return render(request, 'cli1/index.html', {'users': users})
+        mesg = '添加成功！'
+        return render(request, 'cli1/index.html', {'users': users, 'message':mesg})
 
 #删除用户信息
 def delete(request):
@@ -72,7 +73,8 @@ def delete(request):
         conn.commit()
         cursor.execute("SELECT * FROM users")
         users = cursor.fetchall()
-    return render(request, 'cli1/index.html', {'users': users})
+    mesg = '删除成功！'
+    return render(request, 'cli1/index.html', {'users': users, 'message':mesg})
 
     # return redirect('cli1/index.html')
 
@@ -103,9 +105,10 @@ def edit(request):
             cursor.execute("UPDATE users SET NAME=%s,AGE=%s,FANS=%s,FOLLOWS=%s,PUBLISHED=%s,FAVORITES=%s WHERE ID=%s",
                            [user_name, user_age, user_fans, user_follows, user_pub, user_favorites, id])
             conn.commit()
-            cursor.execute("SELECT * FROM users")
+            cursor.execute("SELECT * FROM users WHERE ID = %s", [id])
             users = cursor.fetchall()
-        return render(request, 'cli1/index.html', {'users': users})
+        mesg = '修改成功！'
+        return render(request, 'cli1/index.html', {'users': users, 'message':mesg})
 
         # return redirect('cl1/index.html')
 
@@ -124,7 +127,8 @@ def find(request):
             message = '查无此人！请输入正确的用户ID！'
             return render(request, 'cli1/find.html', {'message':message})
         else:
-            return render(request, 'cli1/index.html', {'users':result})
+            mesg = '查询成功！'
+            return render(request, 'cli1/index.html', {'users':result, 'message':mesg})
 
 #建立视频表查询的操作函数
 def v_index(request):
@@ -153,7 +157,8 @@ def v_add(request):
             conn.commit()
             cursor.execute("SELECT * FROM videos")
             users = cursor.fetchall()
-        return render(request, 'cli1/v_index.html', {'users': users})
+        mesg = '添加成功'
+        return render(request, 'cli1/v_index.html', {'users': users, 'message':mesg})
 
 #删除视频信息
 def v_delete(request):
@@ -165,7 +170,8 @@ def v_delete(request):
         conn.commit()
         cursor.execute("SELECT * FROM videos")
         users = cursor.fetchall()
-    return render(request, 'cli1/v_index.html', {'users': users})
+    mesg = '删除成功！'
+    return render(request, 'cli1/v_index.html', {'users': users, 'message':mesg})
 
     # return redirect('cli1/index.html')
 
@@ -195,9 +201,10 @@ def v_edit(request):
             cursor.execute("UPDATE videos SET AUTHOR=%s,LIKES=%s,PERFORMED=%s,COMMENT=%s,INTRO=%s WHERE NO=%s",
                            [video_author, video_likes, video_performed, video_comment, video_intro, no])
             conn.commit()
-            cursor.execute("SELECT * FROM videos")
+            cursor.execute("SELECT * FROM videos WHERE NO = %s", [no])
             users = cursor.fetchall()
-        return render(request, 'cli1/v_index.html', {'users': users})
+        mesg = '修改成功！'
+        return render(request, 'cli1/v_index.html', {'users': users, 'message':mesg})
 
 def v_find(request):
     if request.method == 'GET':
@@ -213,4 +220,5 @@ def v_find(request):
             message = '没有此视频信息！请输入正确的视频序号！'
             return render(request, 'cli1/v_find.html', {'message':message})
         else:
-            return render(request, 'cli1/v_index.html', {'users':result})
+            mesg = '查找成功！'
+            return render(request, 'cli1/v_index.html', {'users':result, 'message':mesg})
