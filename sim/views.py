@@ -58,9 +58,12 @@ def add(request):
             cursor.execute("INSERT INTO users (NAME,SEX,AGE)"
                            "VALUES (%s, %s, %s)", [user_name,user_sex,user_age])
             conn.commit()
-            cursor.execute("SELECT * FROM users")
+            cursor.execute("SELECT MAX(ID) FROM users")
+            users_id = cursor.fetchall()[0]['MAX(ID)']
+            print(users_id)
+            cursor.execute("SELECT * from users WHERE ID = %s", [users_id])
             users = cursor.fetchall()
-        mesg = '添加成功！'
+        mesg = '添加成功！ID为:'+str(users_id)
         return render(request, 'cli1/index.html', {'users': users, 'message':mesg})
 
 #删除用户信息
@@ -71,7 +74,7 @@ def delete(request):
         cursor.execute("DELETE FROM users WHERE ID = %s", [id])
         # cursor.execute("CALL USERDELECT(%s)", [id])
         conn.commit()
-        cursor.execute("SELECT * FROM users")
+        cursor.execute("SELECT * FROM users WHERE ID<1001")
         users = cursor.fetchall()
     mesg = '删除成功！'
     return render(request, 'cli1/index.html', {'users': users, 'message':mesg})

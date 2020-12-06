@@ -4,34 +4,60 @@
     <meta charset="UTF-8">
     <title>添加用户</title>
     <style>
+        .button {
+            display: block;
+            margin: 0 auto;
+            line-height: 30px;
+            font-size: 20px;
+            color: #fff;
+            background: #0f88eb;
+            border: 5px;
+            border-radius: 10px;
+            font-family: 楷体;
+            width: 100px;
+        }
         form {
             margin: 20px auto;
-            width: 500px;
+            width: 400px;
             border: 1px solid #ccc;
             padding: 20px
         }
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            outline: none;
+            margin-bottom: 10px;
+            border-radius: 5px; }
     </style>
 </head>
 <body>
 <form method="post">
 {#     action="sim/add/"#}
     {% csrf_token %}
-    <table>
+    <h2 align="center" style="font-family: 仿宋; font-size: 30px">添加用户</h2>
+    <table align="center">
         <tr>
-            <th>昵称</th>
+            <th style="font-family: 华文仿宋; font-size: 20px; color: #555555;">昵称</th>
             <td><input name="user_name"></td>
         </tr>
         <tr>
-            <th>性别</th>
-            <td><input name="user_sex"/></td>
+            <th style="font-family: 华文仿宋; font-size: 20px; color: #555555">性别</th>
+            <td>
+                <input name="user_sex" type="text" list="typelist" placeholder="请选择">
+                <datalist id="typelist">
+                    <option>F</option>
+                    <option>M</option>
+                </datalist>
+            </td>
         </tr>
         <tr>
-            <th>年龄</th>
+            <th style="font-family: 华文仿宋; font-size: 20px; color: #555555">年龄</th>
             <td><input name="user_age"/></td>
         </tr>
         <tr>
             <td colspan="2" align="center">
-                <input type="submit"/>
+                <input type="submit" class="button"/>
             </td>
         </tr>
     </table>
