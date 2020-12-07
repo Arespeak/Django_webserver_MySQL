@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1,maximum-scale=1">
-	<title>vue前后端分离</title>
+{#    <script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>#}
+	<title>登录界面</title>
 
 	<style>
         .button {
@@ -40,11 +41,24 @@
             padding: 20px;
             top: 200px;
         }
+        html, body {
+
+            margin: 0;
+
+            padding: 0;
+
+            height: 100%;
+
+            overflow: hidden;
+
+    }
 
     </style>
 </head>
 <body>
-		<form method="post">
+<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+
+<form method="post">
             {% csrf_token %}
             <h2 align="center" style="font-family: 楷体; font-size: 45px; color: gray">管理员登录</h2>
                 <div class="hint">请输入用户名</div>
