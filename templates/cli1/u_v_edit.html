@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改信息</title>
+    <style>
+        form {
+            margin: 20px auto;
+            width: 500px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            top: 300px;
+        }
+    </style>
+</head>
+<body>
+<form method="post" action="">
+{#    action="sim/edit/">#}
+    {% csrf_token %}
+{#    <input type="hidden" name="ID" value="{{ users.ID }}"/>#}
+    <input type="hidden" name="NO" value="{{ users.NO }}">
+    <h2 align="left">修改编号{{ users.NO }}视频的信息：</h2>
+
+    <table>
+        <tr>
+            <th>作者:</th>
+            <td><input align="center" name="video_author" value="{{ users.AUTHOR }}"></td>
+        </tr>
+        <tr>
+            <th>获赞数:</th>
+            <td><input name="video_likes" value="{{ users.LIKES }}"/></td>
+        </tr>
+        <tr>
+            <th>播放量:</th>
+            <td><input name="video_performed" value="{{ users.PERFORMED }}"/></td>
+        </tr>
+        <tr>
+            <th>评论量:</th>
+            <td><input name="video_comment" value="{{ users.COMMENT }}"/></td>
+        </tr>
+        <tr>
+            <th>简介:</th>
+            <td><input name="video_intro" value="{{ users.INTRO }}"/></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit"/>
+            </td>
+        </tr>
+    </table>
+</form>
+<!--
+    作者：桑忠人 18281160
+    时间：2020.11
+    描述：本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有！
+-->
+<div id="footer" align="center">本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有</div>
+</body>
+</html>

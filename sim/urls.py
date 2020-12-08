@@ -14,4 +14,8 @@ urlpatterns = [
     url(r'^v_edit/$', views.v_edit),
     url(r'^v_delete/$', views.v_delete),
     url(r'^v_find/$', views.v_find),
+    url(r'^sign_up/$', views.sign_up),
+    url(r'^u_index/$', views.u_index),
+    url(r'^u_delete/$', views.u_delete),
+    url(r'^u_v_add/$', views.u_v_add),
 ]

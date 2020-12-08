@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1,maximum-scale=1">
+{#    <script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>#}
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/login.css">
+	<script src="/static/js/jquery-1.10.2.js"></script>
+	<title>注册界面</title>
+
+	<style>
+        .hint {
+            font-size: 20px;
+            font-family: 楷体;
+            color: #cccccc;
+            text-align: left;
+            padding-right: 10px;
+            margin-bottom: 15px;
+            visibility: visible; }
+        form {
+            margin: 20px auto;
+            width: 500px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            top: 200px;
+            align-self: center;
+        html, body {
+
+            margin: 0;
+
+            padding: 0;
+
+            height: 100%;
+
+            overflow: hidden;
+
+    }
+
+    </style>
+</head>
+<body>
+<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+        <form method="post" style="position: center">
+            {% csrf_token %}
+            <h2 align="center" style="font-family: 楷体; font-size: 45px; color: gray">用户注册</h2>
+                <div class="hint">请输入用户名</div>
+				<input class="input" name="u_name" type="text" aria-label="用户名" placeholder="用户名">
+				<div class="hint">性别</div>
+                <input class="input" name="u_sex" type="text" list="typelist" aria-label="性别" placeholder="请选择性别">
+                    <datalist id="typelist">
+                    <option>F</option>
+                    <option>M</option>
+                    </datalist>
+                <div class="hint">请输入年龄</div>
+                <input class="input" name="u_age" type="number" aria-label="年龄" placeholder="年龄">
+                <div class="hint">请输入密码</div>
+                <input class="input" name="u_password" type="password" aria-label="密码" placeholder="设置密码">
+				<input type="submit" id="button" class="button" name="button" value="注册">
+        </form>
+</body>
+</html>

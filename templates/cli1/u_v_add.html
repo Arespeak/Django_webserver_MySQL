@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加视频信息</title>
+    <style>
+        form {
+            margin: 20px auto;
+            width: 500px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            top: 300px;
+        }
+    </style>
+</head>
+<body>
+<form method="post">
+{#     action="sim/add/"#}
+    {% csrf_token %}
+    <table>
+        <tr>
+            <th>作者</th>
+            <td><input name="video_author" value="{{ u_name }}" readonly></td>
+        </tr>
+        <tr>
+            <th>简介</th>
+            <td><input name="video_intro"/></td>
+        </tr>
+{#        <tr>#}
+{#            <th>年龄</th>#}
+{#            <td><input name="user_age"/></td>#}
+{#        </tr>#}
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit"/>
+            </td>
+        </tr>
+    </table>
+</form>
+<!--
+    作者：桑忠人 18281160
+    时间：2020.11
+    描述：本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有！
+-->
+<div id="footer" align="center">本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有</div>
+</body>
+</html>

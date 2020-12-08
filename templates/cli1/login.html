@@ -4,28 +4,12 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1,maximum-scale=1">
 {#    <script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>#}
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/login.css">
+	<script src="/static/js/jquery-1.10.2.js"></script>
 	<title>登录界面</title>
 
 	<style>
-        .button {
-            display: block;
-            margin: 0 auto;
-            line-height: 30px;
-            font-size: 20px;
-            color: #fff;
-            background: #0f88eb;
-            border: 0;
-            border-radius: 10px;
-        }
-        input, textarea {
-            border: 1px solid #ddeafb; }
-        input {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 10px;
-            outline: none;
-            margin-bottom: 5px;
-            border-radius: 5px; }
         .hint {
             font-size: 20px;
             font-family: 楷体;
@@ -34,13 +18,13 @@
             padding-right: 10px;
             margin-bottom: 15px;
             visibility: visible; }
-        form {
-            margin: 20px auto;
-            width: 500px;
-            border: 1px solid #ccc;
-            padding: 20px;
-            top: 200px;
-        }
+        {#form {#}
+        {#    margin: 20px auto;#}
+        {#    width: 500px;#}
+        {#    border: 1px solid #ccc;#}
+        {#    padding: 20px;#}
+        {#    top: 200px;#}
+        {#    align-self: center;#}
         html, body {
 
             margin: 0;
@@ -57,16 +41,42 @@
 </head>
 <body>
 <script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+<div class="login_cont">
+        <div class="login_nav">
+			<div class="nav_slider">
+				<a href="#" class="signup focus">管理员</a>
+				<a href="#" class="signin">用户</a>
+			</div>
+        </div>
 
-<form method="post">
+        <form method="post" style="position: center">
+            <div class="input_signup active">
             {% csrf_token %}
             <h2 align="center" style="font-family: 楷体; font-size: 45px; color: gray">管理员登录</h2>
                 <div class="hint">请输入用户名</div>
 				<input class="input" name="admin_name" type="text" aria-label="用户名" placeholder="用户名">
 				<div class="hint">请输入工号</div>
-                <input class="input" name="admin_id" type="password" aria-label="工号" placeholder="工号">
+                <input class="input" name="admin_id" type="text" aria-label="工号" placeholder="工号">
 				<input type="submit" id="button" class="button" name="button" value="登录">
-		</form>
+		    </div>
+        </form>
+
+        <form method="post" style="position: center">
+            <div class="input_signin">
+            {% csrf_token %}
+            <h2 align="center" style="font-family: 楷体; font-size: 45px; color: gray">用户登录</h2>
+                <div class="hint">请输入用户名</div>
+				<input class="input" name="u_id" type="text" aria-label="账号" placeholder="账号">
+				<div class="hint">请输入密码</div>
+                <input class="input" name="u_password" type="password" aria-label="密码" placeholder="密码">
+				<input type="submit" id="button" class="button" name="button" value="登录">
+                <div class="forget">
+					<a href="/sim/sign_up">注册用户</a>
+				</div>
+            </div>
+        </form>
+</div>
+<script type="text/javascript" src="/static/js/login.js"></script>
 {% if message %}
     <script>
         alert('{{ message }}')

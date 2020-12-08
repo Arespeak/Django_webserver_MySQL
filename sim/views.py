@@ -7,25 +7,120 @@
 from django.shortcuts import render, redirect
 import MySQLdb
 
+
 # Create your views here.
 #登录界面
 def login(request):
     if request.method == 'GET':
         return render(request, 'cli1/login.html')
     else:
-        admin_name = request.POST.get('admin_name')
-        admin_id = request.POST.get('admin_id')
+        admin_name = request.POST.get('admin_name', '')
+        admin_id = request.POST.get('admin_id', '')
+        user_id = request.POST.get('u_id', '')
+        user_password = request.POST.get('u_password', '')
         conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
                                charset='utf8')
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
             cursor.execute("SELECT WORK_ID FROM adminors WHERE NAME=%s", [admin_name])
             result = cursor.fetchall()
-        if not result or admin_id != result[0]["WORK_ID"]:
-            mesg = '用户名或工号输入错误！请重新输入!'
-            return render(request, 'cli1/login.html', {'message': mesg})
+            cursor.execute("SELECT * FROM users WHERE ID = %s", [user_id])
+            u_result = cursor.fetchall()
+        if len(admin_name) != 0 & len(admin_id) != 0:
+            if not result or admin_id != result[0]["WORK_ID"]:
+                print(len(admin_name), admin_id)
+                print(result)
+                mesg = '用户名或工号输入错误！请重新输入!'
+                return render(request, 'cli1/login.html', {'message': mesg})
+            else:
+                print(admin_name, admin_id)
+                return render(request, 'cli1/content.html')
         else:
-            return render(request, 'cli1/content.html')
+            if not u_result or user_password != u_result[0]["U_PASSWORD"]:
+                mesg = "用户名或密码输入错误！请重新输入!"
+                return render(request, 'cli1/login.html', {'message': mesg})
+            else:
+                print(u_result)
+                u_name = u_result[0]["NAME"]
+                with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+                    cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
+                    videos = cursor.fetchall()
+                    mesg = '登陆成功！'
+                    video0 = videos[0]
+                print(video0)
+                return render(request, 'cli1/u_index.html', {'users':u_result, 'videos':videos,'video0':video0, 'message':mesg})
 
+def u_index(request):
+    if request.method == 'GET':
+        u_name = request.POST.get("u_name")
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM users WHERE NAME = %s", [u_name])
+            users = cursor.fetchall()
+            cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
+            videos = cursor.fetchall()
+            video0 = videos[0]
+        print(u_name)
+        return render(request, 'cli1/u_index.html', {'users': users, 'videos':videos, 'video0':video0})
+
+def u_v_add(request):
+    if request.method == 'GET':
+        u_name = request.GET.get("v_u_name")
+        print(u_name)
+        return render(request, 'cli1/u_v_add.html', {'u_name':u_name})
+    else:
+        video_author = request.POST.get('video_author', '')
+        video_intro = request.POST.get('video_intro', '')
+        # user_age = request.POST.get('user_age', '')
+        # user_age = int(user_age)
+        conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform", charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("INSERT INTO videos (AUTHOR,INTRO)"
+                           "VALUES (%s, %s)", [video_author, video_intro])
+            conn.commit()
+            cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [video_author])
+            videos = cursor.fetchall()
+            cursor.execute("SELECT * FROM users WHERE NAME = %s", [video_author])
+            users = cursor.fetchall()
+            video0 = videos[0]
+        mesg = '添加成功'
+        return render(request, 'cli1/u_index.html', {'users': users, 'videos':videos,'video0':video0,'message':mesg})
+
+def u_delete(request):
+    u_name = request.GET.get("u_name")
+    conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform", charset='utf8')
+    with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+        cursor.execute("DELETE FROM videos WHERE AUTHOR = %s", [u_name])
+        # cursor.execute("CALL USERDELECT(%s)", [id])
+        conn.commit()
+        cursor.execute("SELECT * FROM users WHERE NAME = %s", [u_name])
+        users = cursor.fetchall()
+        cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
+        videos = cursor.fetchall()
+    mesg = '删除成功！'
+    print(u_name)
+    return render(request, 'cli1/u_index.html', {'users': users, 'videos':videos, 'message': mesg})
+
+
+#注册界面
+def sign_up(request):
+    if request.method == 'GET':
+        return render(request, 'cli1/sign_up.html')
+    else:
+        user_name = request.POST.get('u_name', '')
+        user_sex = request.POST.get('u_sex', '')
+        user_age = request.POST.get('u_age', '')
+        user_password = request.POST.get('u_password', '')
+        conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("INSERT INTO users (NAME,SEX,AGE,U_PASSWORD)"
+                           "VALUES (%s, %s, %s, %s)", [user_name, user_sex, user_age, user_password])
+            conn.commit()
+            cursor.execute("SELECT MAX(ID) FROM users")
+            users_id = cursor.fetchall()[0]['MAX(ID)']
+        mesg = '注册成功！账号为：' + str(users_id)
+        return render(request, 'cli1/login.html', {'message': mesg})
 
 #目录网页
 def content(request):
@@ -91,7 +186,6 @@ def edit(request):
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
             cursor.execute("SELECT * FROM users WHERE ID = %s", [id])
             users = cursor.fetchone()
-        print(users)
         return render(request, 'cli1/edit.html', {'users':users})
     else:
         id = request.POST.get("ID")
