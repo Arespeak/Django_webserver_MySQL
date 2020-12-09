@@ -25,7 +25,7 @@ def login(request):
             result = cursor.fetchall()
             cursor.execute("SELECT * FROM users WHERE ID = %s", [user_id])
             u_result = cursor.fetchall()
-        if len(admin_name) != 0 & len(admin_id) != 0:
+        if len(admin_name) != 0 or len(admin_id) != 0:
             if not result or admin_id != result[0]["WORK_ID"]:
                 print(len(admin_name), admin_id)
                 print(result)
@@ -45,9 +45,17 @@ def login(request):
                     cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
                     videos = cursor.fetchall()
                     mesg = '登陆成功！'
+                    print(not videos)
+                    print(len(videos))
+                if videos:
                     video0 = videos[0]
-                print(video0)
-                return render(request, 'cli1/u_index.html', {'users':u_result, 'videos':videos,'video0':video0, 'message':mesg})
+                    mesg = '登陆成功！'
+                    return render(request, 'cli1/u_index.html',
+                                  {'users': u_result, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':u_name})
+                else:
+                    mesg = '登录成功！'
+                    return render(request, 'cli1/u_index.html',
+                                  {'users': u_result, 'videos': videos, 'message': mesg, 'u_v_name':u_name})
 
 def u_index(request):
     if request.method == 'GET':
@@ -59,9 +67,15 @@ def u_index(request):
             users = cursor.fetchall()
             cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
             videos = cursor.fetchall()
+        if videos:
             video0 = videos[0]
-        print(u_name)
-        return render(request, 'cli1/u_index.html', {'users': users, 'videos':videos, 'video0':video0})
+            mesg = '添加成功'
+            return render(request, 'cli1/u_index.html',
+                          {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':u_name})
+        else:
+            mesg = '添加成功'
+            return render(request, 'cli1/u_index.html',
+                          {'users': users, 'videos': videos, 'message': mesg, 'u_v_name':u_name})
 
 def u_v_add(request):
     if request.method == 'GET':
@@ -82,14 +96,24 @@ def u_v_add(request):
             videos = cursor.fetchall()
             cursor.execute("SELECT * FROM users WHERE NAME = %s", [video_author])
             users = cursor.fetchall()
+        if videos:
             video0 = videos[0]
-        mesg = '添加成功'
-        return render(request, 'cli1/u_index.html', {'users': users, 'videos':videos,'video0':video0,'message':mesg})
+            mesg = '添加成功'
+            return render(request, 'cli1/u_index.html',
+                          {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':video_author})
+        else:
+            mesg = '添加成功'
+            return render(request, 'cli1/u_index.html',
+                          {'users': users, 'videos': videos, 'message': mesg, 'u_v_name':video_author})
+
 
 def u_delete(request):
-    u_name = request.GET.get("u_name")
+    # u_name = request.GET.get("u_name")
+    v_id = request.GET.get("v_id")
     conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform", charset='utf8')
     with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+        cursor.execute("SELECT AUTHOR FROM videos WHERE NO = %s", [v_id])
+        u_name = cursor.fetchall()
         cursor.execute("DELETE FROM videos WHERE AUTHOR = %s", [u_name])
         # cursor.execute("CALL USERDELECT(%s)", [id])
         conn.commit()
@@ -97,9 +121,15 @@ def u_delete(request):
         users = cursor.fetchall()
         cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
         videos = cursor.fetchall()
-    mesg = '删除成功！'
-    print(u_name)
-    return render(request, 'cli1/u_index.html', {'users': users, 'videos':videos, 'message': mesg})
+    if not videos:
+        video0 = videos[0]
+        mesg = '删除成功'
+        return render(request, 'cli1/u_index.html',
+                      {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':u_name})
+    else:
+        mesg = '删除成功'
+        return render(request, 'cli1/u_index.html',
+                      {'users': users, 'videos': videos, 'message': mesg, 'u_v_name':u_name})
 
 
 #注册界面
