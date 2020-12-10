@@ -58,8 +58,8 @@
             <td align="center">{{ user.PUBLISHED }} </td>
             <td align="center">{{ user.FAVORITES }} </td>
             <td align="center">
-                <button onclick="window.location.href='../edit/?ID={{ user.ID }}'" style="border-radius: 5px; font-family: 楷体">
-                    编辑
+                <button onclick="window.location.href='/sim/u_edit/?ID={{ user.ID }}'" style="border-radius: 5px; font-family: 楷体">
+                    修改信息
                 </button>
             </td>
         </tr>
@@ -96,7 +96,7 @@
 {#                <button onclick="window.location.href='../u_v_edit/?u_name={{ user.AUTHOR }}'" style="border-radius: 5px; font-family: 楷体">#}
 {#                    编辑#}
 {#                </button>#}
-                <button onclick="window.location.href='/sim/u_delete/?v_id={{ user.id }}'" style="border-radius: 5px; font-family: 楷体">
+                <button onclick="window.location.href='/sim/u_delete/?v_id={{ user.NO }}'" style="border-radius: 5px; font-family: 楷体">
                     删除
                 </button>
             </td>

@@ -110,18 +110,20 @@ def u_v_add(request):
 def u_delete(request):
     # u_name = request.GET.get("u_name")
     v_id = request.GET.get("v_id")
+    print(v_id)
     conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform", charset='utf8')
     with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
         cursor.execute("SELECT AUTHOR FROM videos WHERE NO = %s", [v_id])
         u_name = cursor.fetchall()
-        cursor.execute("DELETE FROM videos WHERE AUTHOR = %s", [u_name])
+        print(u_name)
+        cursor.execute("DELETE FROM videos WHERE AUTHOR = %s", [u_name[0]['AUTHOR']])
         # cursor.execute("CALL USERDELECT(%s)", [id])
         conn.commit()
-        cursor.execute("SELECT * FROM users WHERE NAME = %s", [u_name])
+        cursor.execute("SELECT * FROM users WHERE NAME = %s", [u_name[0]['AUTHOR']])
         users = cursor.fetchall()
-        cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
+        cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name[0]['AUTHOR']])
         videos = cursor.fetchall()
-    if not videos:
+    if videos:
         video0 = videos[0]
         mesg = '删除成功'
         return render(request, 'cli1/u_index.html',
@@ -130,6 +132,42 @@ def u_delete(request):
         mesg = '删除成功'
         return render(request, 'cli1/u_index.html',
                       {'users': users, 'videos': videos, 'message': mesg, 'u_v_name':u_name})
+
+def u_edit(request):
+    if request.method == 'GET':
+        id = request.GET.get("ID")
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM users WHERE ID = %s", [id])
+            users = cursor.fetchone()
+        return render(request, 'cli1/u_edit.html', {'users':users})
+    else:
+        id = request.POST.get("ID")
+        user_name = request.POST.get('user_name', '')
+        user_age = request.POST.get('user_age', '')
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+            conn.commit()
+            cursor.execute("UPDATE users SET NAME=%s,AGE=%s WHERE ID=%s",
+                           [user_name, user_age, id])
+            conn.commit()
+            cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
+            conn.commit()
+            cursor.execute("SELECT * FROM users WHERE ID = %s", [id])
+            users = cursor.fetchall()
+            cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [user_name])
+            videos = cursor.fetchall()
+        if videos:
+            video0 = videos[0]
+            mesg = '修改成功'
+            return render(request, 'cli1/u_index.html',
+                          {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name': user_name})
+        else:
+            mesg = '修改成功'
+            return render(request, 'cli1/u_index.html',
+                          {'users': users, 'videos': videos, 'message': mesg, 'u_v_name': user_name})
 
 
 #注册界面
@@ -204,7 +242,6 @@ def delete(request):
     mesg = '删除成功！'
     return render(request, 'cli1/index.html', {'users': users, 'message':mesg})
 
-    # return redirect('cli1/index.html')
 
 
 #更改用户信息
@@ -237,7 +274,6 @@ def edit(request):
         mesg = '修改成功！'
         return render(request, 'cli1/index.html', {'users': users, 'message':mesg})
 
-        # return redirect('cl1/index.html')
 
 def find(request):
     if request.method == 'GET':

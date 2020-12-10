@@ -9,8 +9,8 @@
             width: 500px;
             border: 1px solid #ccc;
             padding: 20px;
-            top: 300px;
-        }
+            top: 200px;
+            align-self: center;}
     </style>
 </head>
 <body>
@@ -18,37 +18,37 @@
 {#    action="sim/edit/">#}
     {% csrf_token %}
 {#    <input type="hidden" name="ID" value="{{ users.ID }}"/>#}
-    <input type="hidden" name="NO" value="{{ users.NO }}">
-    <h2 align="left">修改编号{{ users.NO }}视频的信息：</h2>
+    <input type="hidden" name="ID" value="{{ users.ID }}">
+    <h2 align="left">修改您的信息：</h2>
 
     <table>
         <tr>
-            <th>作者:</th>
-            <td><input readonly align="center" name="video_author" value="{{ users.AUTHOR }}"></td>
+            <th>用户名:</th>
+            <td><input align="center" name="user_name" value="{{ users.NAME }}"></td>
         </tr>
         <tr>
-            <th>获赞数:</th>
-            <td><input name="video_likes" value="{{ users.LIKES }}"/></td>
+            <th>年龄:</th>
+            <td><input name="user_age" value="{{ users.AGE }}"/></td>
         </tr>
         <tr>
-            <th>播放量:</th>
-            <td><input name="video_performed" value="{{ users.PERFORMED }}"/></td>
+            <th>粉丝数:</th>
+            <td><input readonly name="user_fans" value="{{ users.FANS }}"/></td>
         </tr>
         <tr>
-            <th>评论量:</th>
-            <td><input name="video_comment" value="{{ users.COMMENT }}"/></td>
+            <th>关注:</th>
+            <td><input readonly name="user_follows" value="{{ users.FOLLOWS }}"/></td>
         </tr>
         <tr>
-            <th>简介:</th>
-            <td><input name="video_intro" value="{{ users.INTRO }}"/></td>
+            <th>发布作品数:</th>
+            <td><input readonly name="user_pub" value="{{ users.PUBLISHED }}"/></td>
         </tr>
-{#        <tr>#}
-{#            <th>喜欢:</th>#}
-{#            <td><input name="user_favorites" value="{{ users.FAVORITES }}"/></td>#}
-{#        </tr>#}
+        <tr>
+            <th>喜欢:</th>
+            <td><input readonly name="user_favorites" value="{{ users.FAVORITES }}"/></td>
+        </tr>
         <tr>
             <td colspan="2" align="center">
-                <input type="submit"/>
+                <input type="submit" href="/sim/u_index"/>
             </td>
         </tr>
     </table>
