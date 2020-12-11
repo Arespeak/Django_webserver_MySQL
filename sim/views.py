@@ -171,7 +171,7 @@ def u_delete(request):
         cursor.execute("SELECT AUTHOR FROM videos WHERE NO = %s", [v_id])
         u_name = cursor.fetchall()
         print(u_name)
-        cursor.execute("DELETE FROM videos WHERE AUTHOR = %s", [u_name[0]['AUTHOR']])
+        cursor.execute("DELETE FROM videos WHERE NO = %s", [v_id])
         # cursor.execute("CALL USERDELECT(%s)", [id])
         conn.commit()
         cursor.execute("SELECT * FROM users WHERE NAME = %s", [u_name[0]['AUTHOR']])
