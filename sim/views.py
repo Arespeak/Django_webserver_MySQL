@@ -396,7 +396,6 @@ def v_delete(request):
     mesg = '删除成功！'
     return render(request, 'cli1/v_index.html', {'users': users, 'message':mesg})
 
-    # return redirect('cli1/index.html')
 
 
 #更改视频信息
