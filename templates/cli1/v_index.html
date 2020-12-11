@@ -43,6 +43,7 @@
         <th>COMMENT</th>
         <th>INTRO</th>
         <th>UPDATE_TIME</th>
+        <th>VIDEOS</th>
 {#        <th>FAVORITES</th>#}
         <th>操作</th>
     </tr>
@@ -56,6 +57,9 @@
             <td align="center">{{ user.COMMENT }} </td>
             <td align="center">{{ user.INTRO }} </td>
             <td align="center">{{ user.UPDATE_TIME }} </td>
+            <td align="center">
+                <a href="/static/videos/{{ user.LOCATION }}">查看视频</a>
+            </td>
 {#            <td align="center">{{ user.FAVORITES }} </td>#}
             <td align="center">
                 <button onclick="window.location.href='../v_edit/?NO={{ user.NO }}'" style="border-radius: 5px; font-family: 楷体">

@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^u_delete/$', views.u_delete),
     url(r'^u_v_add/$', views.u_v_add),
     url(r'^u_edit/$', views.u_edit),
+    url(r'^login_1/$', views.login_1),
 ]

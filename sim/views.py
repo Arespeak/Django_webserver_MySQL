@@ -12,6 +12,7 @@ import MySQLdb
 #登录界面
 def login(request):
     if request.method == 'GET':
+        print("get login.html")
         return render(request, 'cli1/login.html')
     else:
         admin_name = request.POST.get('admin_name', '')
@@ -44,18 +45,70 @@ def login(request):
                 with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
                     cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
                     videos = cursor.fetchall()
-                    mesg = '登陆成功！'
                     print(not videos)
                     print(len(videos))
                 if videos:
                     video0 = videos[0]
-                    mesg = '登陆成功！'
+                    # mesg = '登陆成功！'
                     return render(request, 'cli1/u_index.html',
-                                  {'users': u_result, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':u_name})
+                                  {'users': u_result, 'videos': videos, 'video0': video0, 'u_v_name':u_name})
                 else:
-                    mesg = '登录成功！'
+                    # mesg = '登录成功！'
                     return render(request, 'cli1/u_index.html',
-                                  {'users': u_result, 'videos': videos, 'message': mesg, 'u_v_name':u_name})
+                                  {'users': u_result, 'videos': videos, 'u_v_name':u_name})
+
+def login_1(request):
+    if request.method == 'GET':
+        print("get login.html")
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT MAX(ID) FROM users")
+            users_id = cursor.fetchall()[0]['MAX(ID)']
+        mesg = '注册成功！账号为：' + str(users_id)
+        return render(request, 'cli1/login_1.html', {'message':mesg})
+    else:
+        admin_name = request.POST.get('admin_name', '')
+        admin_id = request.POST.get('admin_id', '')
+        user_id = request.POST.get('u_id', '')
+        user_password = request.POST.get('u_password', '')
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT WORK_ID FROM adminors WHERE NAME=%s", [admin_name])
+            result = cursor.fetchall()
+            cursor.execute("SELECT * FROM users WHERE ID = %s", [user_id])
+            u_result = cursor.fetchall()
+        if len(admin_name) != 0 or len(admin_id) != 0:
+            if not result or admin_id != result[0]["WORK_ID"]:
+                print(len(admin_name), admin_id)
+                print(result)
+                mesg = '用户名或工号输入错误！请重新输入!'
+                return render(request, 'cli1/login_1.html', {'message': mesg})
+            else:
+                print(admin_name, admin_id)
+                return render(request, 'cli1/content.html')
+        else:
+            if not u_result or user_password != u_result[0]["U_PASSWORD"]:
+                mesg = "用户名或密码输入错误！请重新输入!"
+                return render(request, 'cli1/login.html', {'message': mesg})
+            else:
+                print(u_result)
+                u_name = u_result[0]["NAME"]
+                with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+                    cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
+                    videos = cursor.fetchall()
+                    print(not videos)
+                    print(len(videos))
+                if videos:
+                    video0 = videos[0]
+                    # mesg = '登陆成功！'
+                    return render(request, 'cli1/u_index.html',
+                                  {'users': u_result, 'videos': videos, 'video0': video0, 'u_v_name':u_name})
+                else:
+                    # mesg = '登录成功！'
+                    return render(request, 'cli1/u_index.html',
+                                  {'users': u_result, 'videos': videos, 'u_v_name':u_name})
 
 def u_index(request):
     if request.method == 'GET':
@@ -85,12 +138,14 @@ def u_v_add(request):
     else:
         video_author = request.POST.get('video_author', '')
         video_intro = request.POST.get('video_intro', '')
+        video_loca = request.POST.get('video_loca', '')
+        print(video_loca)
         # user_age = request.POST.get('user_age', '')
         # user_age = int(user_age)
         conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform", charset='utf8')
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
-            cursor.execute("INSERT INTO videos (AUTHOR,INTRO)"
-                           "VALUES (%s, %s)", [video_author, video_intro])
+            cursor.execute("INSERT INTO videos (AUTHOR,INTRO,LOCATION)"
+                           "VALUES (%s, %s, %s)", [video_author, video_intro, video_loca])
             conn.commit()
             cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [video_author])
             videos = cursor.fetchall()
@@ -179,6 +234,10 @@ def sign_up(request):
         user_sex = request.POST.get('u_sex', '')
         user_age = request.POST.get('u_age', '')
         user_password = request.POST.get('u_password', '')
+        print(user_password)
+        h_password = hash(user_password)
+        h_password = str(h_password)
+        print(h_password)
         conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform",
                                charset='utf8')
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
@@ -188,7 +247,8 @@ def sign_up(request):
             cursor.execute("SELECT MAX(ID) FROM users")
             users_id = cursor.fetchall()[0]['MAX(ID)']
         mesg = '注册成功！账号为：' + str(users_id)
-        return render(request, 'cli1/login.html', {'message': mesg})
+        # return render(request, 'cli1/login_1.html', {'message': mesg})
+        return redirect('/sim/login_1/', mesg)
 
 #目录网页
 def content(request):
