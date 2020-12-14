@@ -4,7 +4,7 @@
 描述：本server版权为 北京交通大学计算机学院 桑忠人 18281160 所有！
 '''
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 import MySQLdb
 
 
@@ -12,7 +12,6 @@ import MySQLdb
 #登录界面
 def login(request):
     if request.method == 'GET':
-        print("get login.html")
         return render(request, 'cli1/login.html')
     else:
         admin_name = request.POST.get('admin_name', '')
@@ -50,12 +49,14 @@ def login(request):
                 if videos:
                     video0 = videos[0]
                     # mesg = '登陆成功！'
-                    return render(request, 'cli1/u_index.html',
-                                  {'users': u_result, 'videos': videos, 'video0': video0, 'u_v_name':u_name})
+                    # return render(request, 'cli1/u_index.html',
+                    #               {'users': u_result, 'videos': videos, 'video0': video0, 'u_v_name':u_name})
+                    return redirect(reverse('id_index', kwargs={'u_id': user_id}))
                 else:
                     # mesg = '登录成功！'
-                    return render(request, 'cli1/u_index.html',
-                                  {'users': u_result, 'videos': videos, 'u_v_name':u_name})
+                    # return render(request, 'cli1/u_index.html',
+                    #               {'users': u_result, 'videos': videos, 'u_v_name':u_name})
+                    return redirect(reverse('id_index', kwargs={'u_id': user_id}))
 
 def login_1(request):
     if request.method == 'GET':
@@ -103,32 +104,45 @@ def login_1(request):
                 if videos:
                     video0 = videos[0]
                     # mesg = '登陆成功！'
-                    return render(request, 'cli1/u_index.html',
-                                  {'users': u_result, 'videos': videos, 'video0': video0, 'u_v_name':u_name})
+                    # return render(request, 'cli1/u_index.html',
+                    #               {'users': u_result, 'videos': videos, 'video0': video0, 'u_v_name':u_name})
+                    return redirect(reverse('/sim/u_index/u_id', kwargs={'u_id':user_id}))
                 else:
                     # mesg = '登录成功！'
-                    return render(request, 'cli1/u_index.html',
-                                  {'users': u_result, 'videos': videos, 'u_v_name':u_name})
+                    # return render(request, 'cli1/u_index.html',
+                    #               {'users': u_result, 'videos': videos, 'u_v_name':u_name})
+                    return redirect(reverse('/sim/u_index/u_id', kwargs={'u_id':user_id}))
 
-def u_index(request):
+def u_index(request, u_id):
     if request.method == 'GET':
-        u_name = request.POST.get("u_name")
+        print("get u_index")
+        # u_name = request.GET.get("u_name", '')
+        # # u_id = request.GET.get("u_id", '')
+        # print(u_name)
+        print(u_id)
         conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
                                charset='utf8')
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
-            cursor.execute("SELECT * FROM users WHERE NAME = %s", [u_name])
-            users = cursor.fetchall()
-            cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name])
-            videos = cursor.fetchall()
+            try:
+                cursor.execute("SELECT NAME FROM users WHERE ID=%s", [u_id])
+                u_name = cursor.fetchone()
+                cursor.execute("SELECT * FROM users WHERE NAME = %s", [u_name['NAME']])
+                users = cursor.fetchall()
+                cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [u_name['NAME']])
+                videos = cursor.fetchall()
+            except:
+                conn.rollback()
+        print(u_name)
+
         if videos:
             video0 = videos[0]
-            mesg = '添加成功'
+            # mesg = '添加成功'
             return render(request, 'cli1/u_index.html',
-                          {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':u_name})
+                          {'users': users, 'videos': videos, 'video0': video0, 'u_v_name':u_name, 'u_id':u_id})
         else:
-            mesg = '添加成功'
+            # mesg = '添加成功'
             return render(request, 'cli1/u_index.html',
-                          {'users': users, 'videos': videos, 'message': mesg, 'u_v_name':u_name})
+                          {'users': users, 'videos': videos, 'u_v_name':u_name, 'u_id':u_id})
 
 def u_v_add(request):
     if request.method == 'GET':
@@ -144,22 +158,27 @@ def u_v_add(request):
         # user_age = int(user_age)
         conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform", charset='utf8')
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
-            cursor.execute("INSERT INTO videos (AUTHOR,INTRO,LOCATION)"
-                           "VALUES (%s, %s, %s)", [video_author, video_intro, video_loca])
-            conn.commit()
-            cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [video_author])
-            videos = cursor.fetchall()
-            cursor.execute("SELECT * FROM users WHERE NAME = %s", [video_author])
-            users = cursor.fetchall()
+            try:
+                cursor.execute("INSERT INTO videos (AUTHOR,INTRO,LOCATION)"
+                               "VALUES (%s, %s, %s)", [video_author, video_intro, video_loca])
+                conn.commit()
+                cursor.execute("SELECT * FROM videos WHERE AUTHOR = %s", [video_author])
+                videos = cursor.fetchall()
+                cursor.execute("SELECT * FROM users WHERE NAME = %s", [video_author])
+                users = cursor.fetchall()
+            except:
+                conn.rollback()
+                return render(request, 'cli1/u_v_add.html', {'u_name':video_author})
+
         if videos:
             video0 = videos[0]
             mesg = '添加成功'
             return render(request, 'cli1/u_index.html',
-                          {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':video_author})
+                          {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':video_author, 'u_id':users[0]['ID']})
         else:
             mesg = '添加成功'
             return render(request, 'cli1/u_index.html',
-                          {'users': users, 'videos': videos, 'message': mesg, 'u_v_name':video_author})
+                          {'users': users, 'videos': videos, 'message': mesg, 'u_v_name':video_author, 'u_id':users[0]['ID']})
 
 
 def u_delete(request):
@@ -182,11 +201,11 @@ def u_delete(request):
         video0 = videos[0]
         mesg = '删除成功'
         return render(request, 'cli1/u_index.html',
-                      {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':u_name})
+                      {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name':u_name, 'u_id':users[0]['ID']})
     else:
         mesg = '删除成功'
         return render(request, 'cli1/u_index.html',
-                      {'users': users, 'videos': videos, 'message': mesg, 'u_v_name':u_name})
+                      {'users': users, 'videos': videos, 'message': mesg, 'u_v_name':u_name, 'u_id':users[0]['ID']})
 
 def u_edit(request):
     if request.method == 'GET':
@@ -218,11 +237,95 @@ def u_edit(request):
             video0 = videos[0]
             mesg = '修改成功'
             return render(request, 'cli1/u_index.html',
-                          {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name': user_name})
+                          {'users': users, 'videos': videos, 'video0': video0, 'message': mesg, 'u_v_name': user_name,'u_id':id})
         else:
             mesg = '修改成功'
             return render(request, 'cli1/u_index.html',
-                          {'users': users, 'videos': videos, 'message': mesg, 'u_v_name': user_name})
+                          {'users': users, 'videos': videos, 'message': mesg, 'u_v_name': user_name, 'u_id':id})
+
+def view_others(request, u_id):
+    if request.method == 'GET':
+        v_no = request.POST.get('v_no')
+        print(not v_no)
+        print(v_no)
+        user_id = u_id
+        print(user_id)
+        if not v_no:
+            conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                                   charset='utf8')
+            with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+                cursor.execute("SELECT * FROM videos")
+                videos = cursor.fetchall()
+                cursor.execute("SELECT * FROM users WHERE ID = %s", [user_id])
+                users = cursor.fetchall()
+
+            return render(request, 'cli1/view_others.html',
+                          {'videos': videos, 'u_v_name': users[0]['NAME'], 'u_id': user_id})
+        else:
+            conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                                charset='utf8')
+            with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+                cursor.execute("SELECT * FROM videos WHERE NO=%s", [v_no])
+                videos = cursor.fetchall()
+                cursor.execute("SELECT * FROM users WHERE ID = %s", [u_id])
+                users = cursor.fetchall()
+
+        return render(request, 'cli1/view_others.html',
+                      {'videos': videos, 'u_v_name': users[0]['NAME'], 'u_id': u_id})
+
+
+def search_others(request, u_id, v_id):
+    if request.method == 'GET':
+        print(v_id)
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM videos WHERE NO=%s", [v_id])
+            videos = cursor.fetchall()
+            cursor.execute("SELECT * FROM users WHERE ID = %s", [u_id])
+            users = cursor.fetchall()
+
+        return render(request, 'cli1/view_others.html',
+                      {'videos': videos, 'u_v_name': users[0]['NAME'], 'u_id': u_id})
+
+def likes(request, u_id):
+    if request.method == 'GET':
+        video_id = request.GET.get('video_id')
+        print(video_id)
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("UPDATE videos set LIKES=LIKES+1 WHERE NO=%s", [video_id])
+            conn.commit()
+            cursor.execute("UPDATE users set FAVORITES=FAVORITES+1 WHERE ID=%s", [u_id])
+            conn.commit()
+            cursor.execute("SELECT * FROM videos")
+            videos = cursor.fetchall()
+            cursor.execute("SELECT * FROM users WHERE ID = %s", [u_id])
+            users = cursor.fetchall()
+
+        return render(request, 'cli1/view_others.html',
+                      {'videos': videos, 'u_v_name': users[0]['NAME'], 'u_id': u_id})
+
+def follows(request, u_id):
+    if request.method == 'GET':
+        v_author = request.GET.get('v_author')
+        print(v_author)
+        conn = MySQLdb.connect(host="localhost", user="root", passwd="000606", db="short_video_platform",
+                               charset='utf8')
+        with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
+            cursor.execute("UPDATE users SET FANS=FANS+1 WHERE NAME=%s", [v_author])
+            conn.commit()
+            cursor.execute("UPDATE users SET FOLLOWS=FOLLOWS+1 WHERE ID=%s", [u_id])
+            conn.commit()
+            cursor.execute("SELECT * FROM videos")
+            videos = cursor.fetchall()
+            cursor.execute("SELECT * FROM users WHERE ID = %s", [u_id])
+            users = cursor.fetchall()
+
+        return render(request, 'cli1/view_others.html',
+                      {'videos': videos, 'u_v_name': users[0]['NAME'], 'u_id': u_id})
+
 
 
 #注册界面
@@ -234,16 +337,18 @@ def sign_up(request):
         user_sex = request.POST.get('u_sex', '')
         user_age = request.POST.get('u_age', '')
         user_password = request.POST.get('u_password', '')
-        print(user_password)
-        h_password = hash(user_password)
-        h_password = str(h_password)
-        print(h_password)
         conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform",
                                charset='utf8')
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
-            cursor.execute("INSERT INTO users (NAME,SEX,AGE,U_PASSWORD)"
-                           "VALUES (%s, %s, %s, %s)", [user_name, user_sex, user_age, user_password])
-            conn.commit()
+            try:
+                cursor.execute("INSERT INTO users (NAME,SEX,AGE,U_PASSWORD)"
+                               "VALUES (%s, %s, %s, %s)", [user_name, user_sex, user_age, user_password])
+                conn.commit()
+            except:
+                mesg = "注册失败，请重新注册！"
+                conn.rollback()
+                return render(request, 'cli1/sign_up.html', {'message':mesg})
+
             cursor.execute("SELECT MAX(ID) FROM users")
             users_id = cursor.fetchall()[0]['MAX(ID)']
         mesg = '注册成功！账号为：' + str(users_id)
@@ -278,14 +383,21 @@ def add(request):
         # user_age = int(user_age)
         conn = MySQLdb.connect(host='localhost', user='root', passwd="000606", db="short_video_platform", charset='utf8')
         with conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) as cursor:
-            cursor.execute("INSERT INTO users (NAME,SEX,AGE)"
-                           "VALUES (%s, %s, %s)", [user_name,user_sex,user_age])
-            conn.commit()
-            cursor.execute("SELECT MAX(ID) FROM users")
-            users_id = cursor.fetchall()[0]['MAX(ID)']
-            print(users_id)
-            cursor.execute("SELECT * from users WHERE ID = %s", [users_id])
-            users = cursor.fetchall()
+            try:
+                cursor.execute("INSERT INTO users (NAME,SEX,AGE)"
+                               "VALUES (%s, %s, %s)", [user_name, user_sex, user_age])
+                conn.commit()
+                cursor.execute("SELECT MAX(ID) FROM users")
+                users_id = cursor.fetchall()[0]['MAX(ID)']
+                print(users_id)
+                cursor.execute("SELECT * from users WHERE ID = %s", [users_id])
+                users = cursor.fetchall()
+            except:
+                mesg = '添加失败！请重新添加！'
+                conn.rollback()
+                return render(request, 'cli1/add.html', {'message':mesg})
+
+        cursor.close()
         mesg = '添加成功！ID为:'+str(users_id)
         return render(request, 'cli1/index.html', {'users': users, 'message':mesg})
 

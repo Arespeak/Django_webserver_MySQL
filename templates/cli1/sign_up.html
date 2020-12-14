@@ -75,5 +75,13 @@
 				<input type="submit" id="button" class="button" name="button" value="注册"  >    {# onclick="window.location.href='/sim/'"> #}
 {#            <button id="button" class="button" value="注册" onclick="window.location.href='../login'">注册</button>#}
         </form>
+
+{% if message %}
+    <script>
+        alert('{{ message }}')
+    </script>
+
+{% endif %}
+
 </body>>
 </html>

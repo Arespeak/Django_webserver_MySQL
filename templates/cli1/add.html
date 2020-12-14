@@ -62,6 +62,14 @@
         </tr>
     </table>
 </form>
+
+{% if message %}
+    <script>
+        alert('{{ message }}')
+    </script>
+
+{% endif %}
+
 <!--
     作者：桑忠人 18281160
     时间：2020.11
