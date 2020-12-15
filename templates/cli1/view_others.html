@@ -236,7 +236,7 @@
     <div class="header" style="position: absolute; left: 11%; top: 0">
 {#        <h2 style="text-indent:10px;margin-top:8px;margin-left:18%;position:absolute;"><i#}
 {#                class="fa fa-user-circle-o"></i>Staff Registration</h2>#}
-        <div class="chip"><img src="/static/images/admin.jpg" alt="Person" width="96" height="96">欢迎您！{{ user_name }}</div>
+        <div class="chip"><img src="/static/images/admin.jpg" alt="Person" width="96" height="96">欢迎您！{{ u_v_name.NAME }}</div>
     </div>
 
 <div style="position: absolute; left: 11%; top: 8%; right: 03%">
@@ -283,7 +283,7 @@
             </td>
 {#            <td align="center">{{ user.FAVORITES }} </td>#}
             <td align="center">
-                <button onclick="window.location.href='/sim/likes/{{ u_id }}/?video_id={{ user.NO }}'" style="border-radius: 5px; font-family: 楷体">
+                <button onclick="window.location.href='/sim/likes/{{ u_id }}/?video_id={{ user.NO }}'" style="border-radius: 5px; font-family: 楷体; background-color: deeppink">
                     点赞
                 </button>
                 <button onclick="window.location.href='/sim/follows/{{ u_id }}/?v_author={{ user.AUTHOR }}'" style="border-radius: 5px; font-family: 楷体">

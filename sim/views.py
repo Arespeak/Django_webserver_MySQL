@@ -284,9 +284,15 @@ def search_others(request, u_id, v_id):
             videos = cursor.fetchall()
             cursor.execute("SELECT * FROM users WHERE ID = %s", [u_id])
             users = cursor.fetchall()
-
-        return render(request, 'cli1/view_others.html',
-                      {'videos': videos, 'u_v_name': users[0]['NAME'], 'u_id': u_id})
+            if len(videos) != 0:
+                return render(request, 'cli1/view_others.html',
+                              {'videos': videos, 'u_v_name': users[0]['NAME'], 'u_id': u_id})
+            else:
+                cursor.execute("SELECT * FROM videos")
+                videos = cursor.fetchall()
+                mesg = '没有此视频！'
+                return render(request, 'cli1/view_others.html',
+                              {'videos': videos, 'u_v_name': users[0]['NAME'], 'u_id': u_id, 'message':mesg})
 
 def likes(request, u_id):
     if request.method == 'GET':
